@@ -491,14 +491,14 @@ footer{border-top:1px solid var(--line);padding:46px 0 26px;background:#000}
 .clip .link-arrow,.card .link-arrow{pointer-events:none}
 
 /* grille « exemples vidéo » */
-.vthumb{position:relative;display:block;width:100%;aspect-ratio:16/10;overflow:hidden;background:#000;border:0;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
-.vthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--ease-out),filter .5s;filter:brightness(.82)}
-.vthumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55))}
+.vthumb{position:relative;display:block;width:100%;aspect-ratio:16/9;overflow:hidden;background:#000;border:0;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.vthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 1.1s var(--ease-out),filter .5s;filter:brightness(.82);pointer-events:none}
+.vthumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55));pointer-events:none}
 .vthumb:hover img{transform:scale(1.07);filter:brightness(1)}
-.vplay{position:absolute;z-index:2;top:50%;left:50%;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;background:var(--gold-grad);color:#0a0a0a;display:grid;place-items:center;box-shadow:0 14px 40px -8px rgba(242,182,31,.65);transition:transform .5s var(--ease-out)}
+.vplay{position:absolute;z-index:2;top:50%;left:50%;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;background:var(--gold-grad);color:#0a0a0a;display:grid;place-items:center;box-shadow:0 14px 40px -8px rgba(242,182,31,.65);transition:transform .5s var(--ease-out);pointer-events:none}
 .vplay svg{width:24px;height:24px;margin-left:3px}
 .vthumb:hover .vplay{transform:scale(1.14)}
-.vdur{position:absolute;z-index:2;right:12px;bottom:12px;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.7);font-size:.75rem;font-weight:600;letter-spacing:.04em}
+.vdur{position:absolute;z-index:2;right:12px;bottom:12px;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.7);font-size:.75rem;font-weight:600;letter-spacing:.04em;pointer-events:none}
 
 /* lecteur plein écran */
 .lightbox{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility .45s}
