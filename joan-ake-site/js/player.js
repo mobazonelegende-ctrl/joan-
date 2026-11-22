@@ -15,9 +15,10 @@
     v.src = src;
     lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
     document.body.classList.add('noscroll');
-    document.dispatchEvent(new CustomEvent('player:open'));
     const p = v.play();                       // lancé directement par le geste de l'utilisateur
-    if (p && p.catch) p.catch(() => {});      // si le navigateur bloque, les contrôles restent visibles
+    if (p && p.catch) p.catch(() => {
+      if (lb.classList.contains('open') && title) title.textContent = 'Lecture impossible. Utilise les contrôles vidéo ou ferme le lecteur.';
+    });
     closeBtn.focus({ preventScroll: true });
   };
   const close = () => {
@@ -25,7 +26,6 @@
     v.pause(); v.removeAttribute('src'); v.load();
     lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('noscroll');
-    document.dispatchEvent(new CustomEvent('player:close'));
     if (opener) opener.focus({ preventScroll: true });
   };
 

@@ -5,10 +5,10 @@ Le formulaire WhatsApp est configuré pour le +225 07 79 94 03 13. Le +225 01 52
 
 ## 2. Photos et vidéos
 Le site n'utilise que 2 photos : `assets/photos/hero-portrait.jpg` (portrait principal) et `assets/photos/terrain-tournage.jpg` (photo prise au milieu du terrain, où l'on filme).
-Les vidéos sont les fichiers HD envoyés en « document » (résolution d'origine, non recompressés) :
+Les vidéos d'origine restent dans leurs fichiers MOV. Les MP4 utilisés par le site sont encodés en H.264 pour fonctionner dans Chrome et sur mobile :
 `WA0069` vidéo brute · `WA0071` vidéo montée · `WA0070` vidéo publicitaire · `WA0072` clip simple · `WA0073` clip FX-Realistic · `WA0075` showreel.
 La vidéo brute `WA0069` est fournie sans piste son.
-Chaque vignette (photo) lance la vidéo en un seul appui, en plein écran, avec le son. Pour remplacer une vidéo : garde le même nom de fichier dans `assets/videos/` (MP4/H.264).
+Les couvertures sont extraites des vidéos. Un appui sur une couverture lance la vidéo en plein écran. Pour remplacer une vidéo : garde le même nom de fichier dans `assets/videos/` (MP4/H.264).
 Tarifs : 20 000 FCFA (brute), 40 000 FCFA (montée), 60 000 FCFA (publicitaire).
 
 ## 3. Publier

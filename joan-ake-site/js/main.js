@@ -1,6 +1,6 @@
 /* ==========================================================
    JOAN AKE — animations & interactions
-   GSAP + ScrollTrigger + Lenis (smooth scroll)
+   GSAP + ScrollTrigger
    ========================================================== */
 
 /* ---------- ⚙️ À MODIFIER : tes infos de contact ---------- */
@@ -20,7 +20,6 @@ const CONFIG = {
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine   = matchMedia('(hover:hover) and (pointer:fine)').matches;
-  let lenis = null;
 
   /* ---------- liens WhatsApp + réseaux ---------- */
   const waUrl = (txt) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt || CONFIG.message)}`;
@@ -54,15 +53,11 @@ const CONFIG = {
   }, { threshold: .35 });
   vids.forEach(v => vio.observe(v));
 
-  /* ---------- lecteur vidéo : on fige le défilement fluide pendant la lecture ---------- */
-  document.addEventListener('player:open',  () => lenis && lenis.stop());
-  document.addEventListener('player:close', () => lenis && lenis.start());
-
   /* ---------- menu mobile ---------- */
   const burger = $('#burger'), menu = $('#menu');
   burger.addEventListener('click', () => {
     const o = burger.classList.toggle('open'); menu.classList.toggle('open', o);
-    burger.setAttribute('aria-expanded', o); o ? lenis && lenis.stop() : lenis && lenis.start();
+    burger.setAttribute('aria-expanded', o);
     document.body.classList.toggle('noscroll', o);
   });
 
@@ -83,7 +78,14 @@ const CONFIG = {
     document.documentElement.classList.remove('js');
     const l = $('#loader'); l && l.remove();
     $$('[data-reveal]').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
-    $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const id = a.getAttribute('href'); if (id.length > 1 && $(id)) { e.preventDefault(); $(id).scrollIntoView({ behavior: 'smooth' }); } }));
+    $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const id = a.getAttribute('href'), target = id.length > 1 && $(id);
+      if (!target) return;
+      e.preventDefault();
+      burger.classList.remove('open'); menu.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false'); document.body.classList.remove('noscroll');
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 60, behavior: reduce ? 'auto' : 'smooth' });
+    }));
   };
 
   const boot = () => {
@@ -91,20 +93,15 @@ const CONFIG = {
     gsap.registerPlugin(ScrollTrigger);
     const EASE = 'power3.inOut', OUT = 'expo.out';          // lent → rapide → lent
 
-    /* ----- smooth scroll ----- */
-    if (!reduce && window.Lenis) {
-      lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(t => lenis.raf(t * 1000));
-      gsap.ticker.lagSmoothing(0);
-      lenis.stop();                                         // bloqué pendant le préchargeur
-    }
-    const scrollTo = (target) => lenis ? lenis.scrollTo(target, { offset: -60, duration: 1.6 }) : $(target)?.scrollIntoView({ behavior: 'smooth' });
+    const scrollTo = (target) => {
+      const el = $(target);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
+    };
     $$('a[href^="#"]').forEach(a => a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
       if (id.length > 1 && $(id)) {
         e.preventDefault();
-        burger.classList.remove('open'); menu.classList.remove('open'); document.body.classList.remove('noscroll'); lenis && lenis.start();
+        burger.classList.remove('open'); menu.classList.remove('open'); document.body.classList.remove('noscroll');
         scrollTo(id);
       }
     }));
@@ -253,7 +250,6 @@ const CONFIG = {
     gsap.set('.hero-tag,.hero-ring', { opacity: 0, scale: .6 });
 
     const intro = () => {
-      lenis && lenis.start();
       const tl = gsap.timeline({ defaults: { ease: OUT } });
       tl.to('.hero-frame', { clipPath: 'inset(0% 0 0 0 round 26px)', duration: 1.8, ease: EASE }, 0)
         .to('.hero-frame img', { scale: 1, duration: 2.4 }, 0)
@@ -291,7 +287,7 @@ const CONFIG = {
 
   boot_wrapper();
   function boot_wrapper() {
-    // scripts "defer" : le DOM est prêt ; on attend GSAP/Lenis (aussi "defer", donc déjà exécutés avant ce fichier)
+    // scripts "defer" : le DOM est prêt ; on attend GSAP (aussi "defer", donc déjà exécuté avant ce fichier)
     if (window.gsap) boot(); else { let n = 0; const t = setInterval(() => { if (window.gsap || ++n > 40) { clearInterval(t); boot(); } }, 100); }
   }
 })();
